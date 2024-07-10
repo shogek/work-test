@@ -1,4 +1,4 @@
-import { MutableRefObject } from 'react'
+import { MutableRefObject, useRef } from 'react'
 import * as cornerstoneTools from 'cornerstone-tools'
 
 type CSToolsButtonsProps = {
@@ -6,15 +6,23 @@ type CSToolsButtonsProps = {
 }
 
 export function CSToolsButtons({ element }: CSToolsButtonsProps) {
-   // TODO: Does it create new stuff if you keep repeatedly clicking it?
+   const isToolEnabledRef = useRef(false)
+
    const enableTool = () => {
+      if (isToolEnabledRef.current) {
+         return
+      }
+
+      isToolEnabledRef.current = true
       cornerstoneTools.addToolForElement(element.current, cornerstoneTools.LengthTool)
       cornerstoneTools.setToolActiveForElement(element.current, 'Length', { mouseButtonMask: 1 })
    }
 
    const disableTool = () => {
+      isToolEnabledRef.current = false
       // TODO: When an annotation tool is disabled, existing annotations for that tool are hidden.
-      cornerstoneTools.setToolDisabledForElement(element.current, 'Length')
+      // TODO: Is this a bug?
+      cornerstoneTools.setToolDisabledForElement(element.current, 'Length', { mouseButtonMask: 1 })
    }
 
    return (
