@@ -1,4 +1,6 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { useAppStateContext } from '../../contexts/use-app-state-context.hook'
+import { FileStatus } from '../../types'
 
 // TODO: Explain that there is a discrepancy in the document regarding what should be included in the "text" field
 // TODO: Explain that the request always fails if it has additional request parameters
@@ -14,15 +16,22 @@ let REQUEST_TIMEOUT_ID: number | undefined
 const REQUEST_DEBOUNCE_MS = 1_000
 
 export function ReportSummaryComponent() {
+   const { fileState } = useAppStateContext()
    const [summary, setSummary] = useState('')
    const [successfulRequestCount, setSuccessfulRequestCount] = useState(0)
    const [requestStatus, setRequestStatus] = useState(RequestStatus.Initial)
 
-   const debounceRequest = async (e: ChangeEvent<HTMLInputElement>) => {
+   useEffect(() => setSummary(''), [fileState.timestamp])
+
+   const annotations = fileState.status === FileStatus.Uploaded ? fileState.annotations : 0
+
+   const debounceRequest = (e: ChangeEvent<HTMLInputElement>) => {
       setSummary(e.target.value)
 
+      const currentAnnotationCount = annotations
+
       clearTimeout(REQUEST_TIMEOUT_ID)
-      REQUEST_TIMEOUT_ID = setTimeout(() => sendRequest(e.target.value, 1), REQUEST_DEBOUNCE_MS)
+      REQUEST_TIMEOUT_ID = setTimeout(() => sendRequest(e.target.value, currentAnnotationCount), REQUEST_DEBOUNCE_MS)
    }
 
    const sendRequest = async (text: string, annotations: number) => {

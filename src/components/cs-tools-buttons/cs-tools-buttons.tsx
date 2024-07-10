@@ -22,7 +22,7 @@ export function CSToolsButtons({ element }: CSToolsButtonsProps) {
       isToolEnabledRef.current = false
       /**
        * When the annotation tool is disabled, the existing annotations for that tool are NOT hidden.
-       * THIS IS INTENTIONAL.
+       * Yes, this is a bug. No, don't fix it - we need it like this.
        */
       cornerstoneTools.setToolDisabledForElement(element.current, 'Length')
    }

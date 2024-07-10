@@ -1,19 +1,21 @@
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
 import * as cornerstoneTools from 'cornerstone-tools'
 import { useAppStateContext } from '../../contexts/use-app-state-context.hook'
-import { FileUploadStatus } from '../../types'
+import { FileStatus } from '../../types'
 
 type CSAnnotationsProps = {
    element: MutableRefObject<HTMLDivElement | null>
 }
 
 export function CSAnnotations({ element }: CSAnnotationsProps) {
-   const { fileUploadState } = useAppStateContext()
+   const { fileState, incrementAnnotations } = useAppStateContext()
    const isListenerAddedRef = useRef(false)
-   const [annotationCount, setAnnotationCount] = useState(0)
+
+   const annotationCount = fileState.status === FileStatus.Uploaded ? fileState.annotations : 0
 
    const handleOnMeasurementEventAdd = useCallback(() => {
-      setAnnotationCount((prev) => prev + 1)
+      incrementAnnotations()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
 
    // TODO: Make this readable for god's sake
@@ -22,7 +24,7 @@ export function CSAnnotations({ element }: CSAnnotationsProps) {
          return
       }
 
-      if (isListenerAddedRef.current && fileUploadState.status !== FileUploadStatus.Uploaded) {
+      if (isListenerAddedRef.current && fileState.status !== FileStatus.Uploaded) {
          isListenerAddedRef.current = false
          element.current.removeEventListener(
             cornerstoneTools.EVENTS.MEASUREMENT_COMPLETED,
@@ -32,7 +34,7 @@ export function CSAnnotations({ element }: CSAnnotationsProps) {
          return
       }
 
-      if (!isListenerAddedRef.current && fileUploadState.status === FileUploadStatus.Uploaded) {
+      if (!isListenerAddedRef.current && fileState.status === FileStatus.Uploaded) {
          isListenerAddedRef.current = true
          element.current.addEventListener(
             cornerstoneTools.EVENTS.MEASUREMENT_COMPLETED,
@@ -41,11 +43,7 @@ export function CSAnnotations({ element }: CSAnnotationsProps) {
          )
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [fileUploadState.status])
-
-   useEffect(() => {
-      setAnnotationCount(0)
-   }, [fileUploadState])
+   }, [fileState.status])
 
    return <div>There are {annotationCount} annotations completed!</div>
 }

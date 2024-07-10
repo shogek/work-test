@@ -2,23 +2,27 @@ export type OperationResult = {
    isSuccess: boolean
 }
 
-export enum FileUploadStatus {
+export enum FileStatus {
    Uploaded = 'Uploaded',
    Error = 'Error',
    NoFile = 'NoFile',
 }
 
-type FileUploadInitial = {
-   status: FileUploadStatus.NoFile
+type FileNotUploaded = {
+   timestamp: number
+   status: FileStatus.NoFile
 }
 
 type FileUploadSuccess = {
-   status: FileUploadStatus.Uploaded
+   timestamp: number
+   status: FileStatus.Uploaded
    name: string
+   annotations: number
 }
 
-type FileUploadFailed = {
-   status: FileUploadStatus.Error
+type FileUploadError = {
+   timestamp: number
+   status: FileStatus.Error
 }
 
-export type FileUploadState = FileUploadInitial | FileUploadSuccess | FileUploadFailed
+export type FileState = FileNotUploaded | FileUploadSuccess | FileUploadError

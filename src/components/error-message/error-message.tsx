@@ -1,10 +1,10 @@
 import { useAppStateContext } from '../../contexts/use-app-state-context.hook'
-import { FileUploadStatus } from '../../types'
+import { FileStatus } from '../../types'
 
 export function ErrorMessage() {
-   const { fileUploadState } = useAppStateContext()
+   const { fileState } = useAppStateContext()
 
-   if (fileUploadState.status !== FileUploadStatus.Error) {
+   if (fileState.status !== FileStatus.Error) {
       return <></>
    }
 
