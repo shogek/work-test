@@ -16,6 +16,7 @@ export function CSAnnotations({ element }: CSAnnotationsProps) {
       setAnnotationCount((prev) => prev + 1)
    }, [])
 
+   // TODO: Make this readable for god's sake
    useEffect(() => {
       if (!element.current) {
          return

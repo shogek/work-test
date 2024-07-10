@@ -15,6 +15,8 @@ async function tryLoadAndViewImage(file: File, element: HTMLElement): Promise<Op
       return { isSuccess: true }
    } catch (error) {
       console.error('Error loading image:', error)
+      /** TODO: This removes the existing image on error but doesn't show a new one on success */
+      // cornerstone.disable(element)
       return { isSuccess: false }
    }
 }
