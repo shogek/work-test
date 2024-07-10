@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useDebounce } from '../../hooks/use-debounce.hook'
+import { ChangeEvent, useState } from 'react'
 
 // TODO: Explain that there is a discrepancy in the document regarding what should be included in the "text" field
 // TODO: Explain that the request always fails if it has additional request parameters
@@ -11,39 +10,38 @@ enum RequestStatus {
    Success = 'success',
 }
 
+let REQUEST_TIMEOUT_ID: number | undefined
+const REQUEST_DEBOUNCE_MS = 1_000
+
 export function ReportSummaryComponent() {
    const [summary, setSummary] = useState('')
-   const debouncedSummary = useDebounce({ value: summary, delayInMs: 1_000 })
    const [successfulRequestCount, setSuccessfulRequestCount] = useState(0)
    const [requestStatus, setRequestStatus] = useState(RequestStatus.Initial)
 
-   useEffect(() => {
-      if (!debouncedSummary) {
-         return
-      }
+   const debounceRequest = async (e: ChangeEvent<HTMLInputElement>) => {
+      setSummary(e.target.value)
 
-      sendRequest(debouncedSummary, 1)
-   }, [debouncedSummary])
+      clearTimeout(REQUEST_TIMEOUT_ID)
+      REQUEST_TIMEOUT_ID = setTimeout(() => sendRequest(e.target.value, 1), REQUEST_DEBOUNCE_MS)
+   }
 
-   // TODO: Bring back the `debounceRequest` method as per requirements
-
-   const sendRequest = (text: string, annotations: number) => {
+   const sendRequest = async (text: string, annotations: number) => {
       setRequestStatus(RequestStatus.Mutating)
 
       const url = `https://668d5423099db4c579f29906.mockapi.io/test?text=${text}&annotations=${annotations}`
-      fetch(url)
-         .then((response) => {
-            if (!response.ok) {
-               setRequestStatus(RequestStatus.Error)
-               return
-            }
 
-            setRequestStatus(RequestStatus.Success)
-            setSuccessfulRequestCount((prev) => prev + 1)
-         })
-         .catch(() => {
+      try {
+         const response = await fetch(url)
+         if (!response.ok) {
             setRequestStatus(RequestStatus.Error)
-         })
+            return
+         }
+
+         setRequestStatus(RequestStatus.Success)
+         setSuccessfulRequestCount((prev) => prev + 1)
+      } catch (error) {
+         setRequestStatus(RequestStatus.Error)
+      }
    }
 
    // TODO: Clear counters and state on new image
@@ -53,11 +51,12 @@ export function ReportSummaryComponent() {
          <input
             value={summary}
             style={{ width: '512px', height: '512px', border: '1px solid black' }}
-            onChange={(e) => setSummary(e.target.value)}
+            onChange={(e) => debounceRequest(e)}
             placeholder={'summary'}
          ></input>
+
          <span style={{ margin: '10px', color: 'red' }}>
-            {requestStatus} ( {successfulRequestCount} )
+            {requestStatus} {successfulRequestCount > 0 && <>( {successfulRequestCount} )</>}
          </span>
       </div>
    )
