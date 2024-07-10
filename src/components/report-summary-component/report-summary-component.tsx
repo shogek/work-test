@@ -2,9 +2,6 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { useAppStateContext } from '../../contexts/use-app-state-context.hook'
 import { FileStatus } from '../../types'
 
-// TODO: Explain that there is a discrepancy in the document regarding what should be included in the "text" field
-// TODO: Explain that the request always fails if it has additional request parameters
-
 enum RequestStatus {
    Initial = 'initial',
    Mutating = 'mutating',
@@ -52,8 +49,6 @@ export function ReportSummaryComponent() {
          setRequestStatus(RequestStatus.Error)
       }
    }
-
-   // TODO: Clear counters and state on new image
 
    return (
       <div style={{ display: 'flex', flexDirection: 'column' }}>
