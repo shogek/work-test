@@ -20,7 +20,7 @@ function App() {
             <MedicalImageCanvas element={imageRef}></MedicalImageCanvas>
             <ErrorMessage></ErrorMessage>
             <CSToolsButtons element={imageRef}></CSToolsButtons>
-            <CSAnnotations></CSAnnotations>
+            <CSAnnotations element={imageRef}></CSAnnotations>
             <ReportSummaryComponent></ReportSummaryComponent>
          </AppStateContextProvider>
       </div>

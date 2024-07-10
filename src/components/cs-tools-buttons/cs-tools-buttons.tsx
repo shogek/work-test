@@ -6,12 +6,14 @@ type CSToolsButtonsProps = {
 }
 
 export function CSToolsButtons({ element }: CSToolsButtonsProps) {
+   // TODO: Does it create new stuff if you keep repeatedly clicking it?
    const enableTool = () => {
       cornerstoneTools.addToolForElement(element.current, cornerstoneTools.LengthTool)
       cornerstoneTools.setToolActiveForElement(element.current, 'Length', { mouseButtonMask: 1 })
    }
 
    const disableTool = () => {
+      // TODO: When an annotation tool is disabled, existing annotations for that tool are hidden.
       cornerstoneTools.setToolDisabledForElement(element.current, 'Length')
    }
 
