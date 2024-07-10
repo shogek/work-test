@@ -1,4 +1,4 @@
-import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 import * as cornerstoneTools from 'cornerstone-tools'
 import { useAppStateContext } from '../../contexts/use-app-state-context.hook'
 import { FileStatus } from '../../types'
