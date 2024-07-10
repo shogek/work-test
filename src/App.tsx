@@ -6,6 +6,7 @@ import { ErrorMessage } from './components/error-message/error-message'
 import { CSToolsButtons } from './components/cs-tools-buttons/cs-tools-buttons'
 import { CSAnnotations } from './components/cs-annotations/cs-annotations'
 import { ReportSummaryComponent } from './components/report-summary-component/report-summary-component'
+import { AppStateContextProvider } from './contexts/app-state.context'
 import './app.css'
 
 function App() {
@@ -13,13 +14,15 @@ function App() {
 
    return (
       <div>
-         <SetupCornerstoneComponent></SetupCornerstoneComponent>
-         <FileInputComponent element={imageRef}></FileInputComponent>
-         <MedicalImageCanvas element={imageRef}></MedicalImageCanvas>
-         <ErrorMessage></ErrorMessage>
-         <CSToolsButtons element={imageRef}></CSToolsButtons>
-         <CSAnnotations></CSAnnotations>
-         <ReportSummaryComponent></ReportSummaryComponent>
+         <AppStateContextProvider>
+            <SetupCornerstoneComponent></SetupCornerstoneComponent>
+            <FileInputComponent element={imageRef}></FileInputComponent>
+            <MedicalImageCanvas element={imageRef}></MedicalImageCanvas>
+            <ErrorMessage></ErrorMessage>
+            <CSToolsButtons element={imageRef}></CSToolsButtons>
+            <CSAnnotations></CSAnnotations>
+            <ReportSummaryComponent></ReportSummaryComponent>
+         </AppStateContextProvider>
       </div>
    )
 }
