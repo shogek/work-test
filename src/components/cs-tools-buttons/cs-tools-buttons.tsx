@@ -20,9 +20,11 @@ export function CSToolsButtons({ element }: CSToolsButtonsProps) {
 
    const disableTool = () => {
       isToolEnabledRef.current = false
-      // TODO: When an annotation tool is disabled, existing annotations for that tool are hidden.
-      // TODO: Is this a bug?
-      cornerstoneTools.setToolDisabledForElement(element.current, 'Length', { mouseButtonMask: 1 })
+      /**
+       * When the annotation tool is disabled, the existing annotations for that tool are NOT hidden.
+       * THIS IS INTENTIONAL.
+       */
+      cornerstoneTools.setToolDisabledForElement(element.current, 'Length')
    }
 
    return (

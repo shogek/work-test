@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import * as cornerstone from 'cornerstone-core'
 import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader'
 import * as cornerstoneTools from 'cornerstone-tools'
@@ -19,12 +18,12 @@ const setupCornerstone = (): void => {
    })
 }
 
-export function SetupCornerstoneComponent() {
-   const isInitRef = useRef(false)
+/** Make sure that enabling happens only once */
+let IS_CORNERSTONE_ENABLED = false
 
-   // TODO: Double check that this gets called once even in StrictMode?
-   if (!isInitRef.current) {
-      isInitRef.current = true
+export function SetupCornerstoneComponent() {
+   if (!IS_CORNERSTONE_ENABLED) {
+      IS_CORNERSTONE_ENABLED = true
       setupCornerstone()
    }
 
