@@ -2,7 +2,7 @@ import { MutableRefObject } from 'react'
 import * as cornerstoneTools from 'cornerstone-tools'
 
 type CSToolsButtonsProps = {
-   element: MutableRefObject<HTMLCanvasElement | null>
+   element: MutableRefObject<HTMLDivElement | null>
 }
 
 export function CSToolsButtons({ element }: CSToolsButtonsProps) {

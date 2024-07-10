@@ -1,8 +1,8 @@
 import * as cornerstone from 'cornerstone-core'
 import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader'
-import { MutableRefObject } from 'react'
+import { ChangeEvent, MutableRefObject } from 'react'
 
-const loadAndViewImage = async (file: File, element: HTMLElement) => {
+async function loadAndViewImage(file: File, element: HTMLElement) {
    cornerstone.enable(element)
 
    const imageId = cornerstoneWADOImageLoader.wadouri.fileManager.add(file)
@@ -16,23 +16,23 @@ const loadAndViewImage = async (file: File, element: HTMLElement) => {
 }
 
 type FileInputComponentProps = {
-   element: MutableRefObject<HTMLCanvasElement | null>
+   element: MutableRefObject<HTMLDivElement | null>
 }
 
 export function FileInputComponent({ element }: FileInputComponentProps) {
-   // when file is uploaded - run handleUpload
-   // TODO: Use the method
-   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      // get image file form event
-      const image = undefined
-
-      if (image && element?.current) {
-         loadAndViewImage(image, element.current)
+   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+      const { files } = e.target
+      if (!files?.length || !element.current) {
+         return
       }
+
+      const image = files[0]
+      loadAndViewImage(image, element.current)
    }
+
    return (
       <form>
-         <input type="file" />
+         <input type="file" onChange={handleUpload} />
       </form>
    )
 }

@@ -9,7 +9,7 @@ import { ReportSummaryComponent } from './components/report-summary-component/re
 import './app.css'
 
 function App() {
-   const imageRef = useRef<HTMLCanvasElement | null>(null)
+   const imageRef = useRef<HTMLDivElement | null>(null)
 
    return (
       <div>
