@@ -1,7 +1,7 @@
 import * as cornerstone from 'cornerstone-core'
 import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader'
 import { ChangeEvent, MutableRefObject } from 'react'
-import { OperationResult } from '../../types'
+import { FileUploadStatus, OperationResult } from '../../types'
 import { useAppStateContext } from '../../contexts/use-app-state-context.hook'
 
 async function tryLoadAndViewImage(file: File, element: HTMLElement): Promise<OperationResult> {
@@ -34,7 +34,12 @@ export function FileInputComponent({ element }: FileInputComponentProps) {
 
       const image = files[0]
       const result = await tryLoadAndViewImage(image, element.current)
-      setFileUploadState({ hasError: !result.isSuccess })
+      if (!result.isSuccess) {
+         setFileUploadState({ status: FileUploadStatus.Error })
+         return
+      }
+
+      setFileUploadState({ status: FileUploadStatus.Uploaded, name: image.name })
    }
 
    return (

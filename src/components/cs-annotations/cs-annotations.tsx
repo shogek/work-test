@@ -1,6 +1,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import * as cornerstoneTools from 'cornerstone-tools'
 import { useAppStateContext } from '../../contexts/use-app-state-context.hook'
+import { FileUploadStatus } from '../../types'
 
 type CSAnnotationsProps = {
    element: MutableRefObject<HTMLDivElement | null>
@@ -21,7 +22,7 @@ export function CSAnnotations({ element }: CSAnnotationsProps) {
    }
 
    useEffect(() => {
-      if (fileUploadState.hasError || !element.current) {
+      if (fileUploadState.status === FileUploadStatus.Error || !element.current) {
          return
       }
 
@@ -29,13 +30,17 @@ export function CSAnnotations({ element }: CSAnnotationsProps) {
          measurementEventAdd(element.current, handleOnMeasurementEventAdd)
       }
 
-      // TODO: Unsubscribe from the event
+      // TODO: Unsubscribe from the event on not success
 
       return () => {
-         // TODO: Unsubscribe from the event
+         // TODO: Unsubscribe from the event on exit
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [fileUploadState.hasError])
+   }, [fileUploadState.status])
+
+   useEffect(() => {
+      setAnnotationCount(0)
+   }, [fileUploadState])
 
    // TODO: reset annotation count on image change.
    return <div>There are {annotationCount} annotations completed!</div>
